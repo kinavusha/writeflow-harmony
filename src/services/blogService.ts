@@ -1,38 +1,56 @@
+import { supabase } from "@/integrations/supabase/client";
 import { BlogOutline, GenerateOutlineRequest } from "@/types/blog";
-
-const API_URL = "https://api.kinovadigitalmarketing.com"; // Replace with actual API URL
 
 export const generateBlogOutline = async (
   data: GenerateOutlineRequest
 ): Promise<BlogOutline> => {
-  // TODO: Replace with actual API call
-  // This is a mock implementation for now
+  const { data: response, error } = await supabase.functions.invoke('generate-blog-outline', {
+    body: data
+  });
+
+  if (error) {
+    throw new Error('Failed to generate blog outline');
+  }
+
   return {
-    introduction: {
-      attention: "Compelling statistic about " + data.topic,
-      interest: "Why " + data.topic + " matters to your audience",
-      desire: "Benefits of understanding " + data.topic,
-      action: "Continue reading to master " + data.topic,
-    },
-    sections: Array(5).fill(null).map((_, index) => ({
-      title: `Section ${index + 1}: Understanding ${data.longTailKeywords[index] || data.shortTailKeyword}`,
-      subsections: Array(3).fill(null).map((_, subIndex) => ({
-        title: `Subsection ${subIndex + 1}`,
-        purpose: `Purpose of subsection ${subIndex + 1}`,
-        mainPoints: [
-          "Main point 1",
-          "Main point 2",
-          "Main point 3",
-        ],
-      })),
+    introduction: response.outline.introduction,
+    sections: response.sections.map((section: any) => ({
+      title: section.title,
+      subsections: section.subsections
     })),
-    conclusion: {
-      summary: [
-        "Key takeaway 1",
-        "Key takeaway 2",
-        "Key takeaway 3",
-      ],
-      cta: "Ready to elevate your content strategy? Contact Kinova Digital Marketing Services today!",
-    },
+    conclusion: response.outline.conclusion
   };
+};
+
+export const saveBlogMetadata = async (
+  outlineId: string,
+  metadata: {
+    internalLinks: string[];
+    externalLinks: string[];
+    statistics: string[];
+  }
+) => {
+  const { error } = await supabase
+    .from('blog_metadata')
+    .insert({
+      outline_id: outlineId,
+      internal_links: metadata.internalLinks,
+      external_links: metadata.externalLinks,
+      statistics: metadata.statistics
+    });
+
+  if (error) {
+    throw new Error('Failed to save blog metadata');
+  }
+};
+
+export const updateSectionContent = async (sectionId: string, content: string) => {
+  const { error } = await supabase
+    .from('blog_sections')
+    .update({ content })
+    .eq('id', sectionId);
+
+  if (error) {
+    throw new Error('Failed to update section content');
+  }
 };
