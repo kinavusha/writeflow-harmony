@@ -9,7 +9,118 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      blog_metadata: {
+        Row: {
+          created_at: string | null
+          external_links: string[] | null
+          id: string
+          internal_links: string[] | null
+          outline_id: string | null
+          statistics: string[] | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          external_links?: string[] | null
+          id?: string
+          internal_links?: string[] | null
+          outline_id?: string | null
+          statistics?: string[] | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          external_links?: string[] | null
+          id?: string
+          internal_links?: string[] | null
+          outline_id?: string | null
+          statistics?: string[] | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blog_metadata_outline_id_fkey"
+            columns: ["outline_id"]
+            isOneToOne: false
+            referencedRelation: "blog_outlines"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      blog_outlines: {
+        Row: {
+          conclusion: Json
+          created_at: string | null
+          id: string
+          introduction: Json
+          long_tail_keywords: string[] | null
+          short_tail_keyword: string
+          topic: string
+          updated_at: string | null
+        }
+        Insert: {
+          conclusion: Json
+          created_at?: string | null
+          id?: string
+          introduction: Json
+          long_tail_keywords?: string[] | null
+          short_tail_keyword: string
+          topic: string
+          updated_at?: string | null
+        }
+        Update: {
+          conclusion?: Json
+          created_at?: string | null
+          id?: string
+          introduction?: Json
+          long_tail_keywords?: string[] | null
+          short_tail_keyword?: string
+          topic?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      blog_sections: {
+        Row: {
+          content: string | null
+          created_at: string | null
+          id: string
+          order_index: number
+          outline_id: string | null
+          subsections: Json
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string | null
+          id?: string
+          order_index: number
+          outline_id?: string | null
+          subsections: Json
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          content?: string | null
+          created_at?: string | null
+          id?: string
+          order_index?: number
+          outline_id?: string | null
+          subsections?: Json
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blog_sections_outline_id_fkey"
+            columns: ["outline_id"]
+            isOneToOne: false
+            referencedRelation: "blog_outlines"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

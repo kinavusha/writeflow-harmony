@@ -32,12 +32,12 @@ export const saveBlogMetadata = async (
 ) => {
   const { error } = await supabase
     .from('blog_metadata')
-    .insert({
+    .insert([{
       outline_id: outlineId,
       internal_links: metadata.internalLinks,
       external_links: metadata.externalLinks,
       statistics: metadata.statistics
-    });
+    }]);
 
   if (error) {
     throw new Error('Failed to save blog metadata');
@@ -47,7 +47,7 @@ export const saveBlogMetadata = async (
 export const updateSectionContent = async (sectionId: string, content: string) => {
   const { error } = await supabase
     .from('blog_sections')
-    .update({ content })
+    .update([{ content }])
     .eq('id', sectionId);
 
   if (error) {
