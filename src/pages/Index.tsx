@@ -25,7 +25,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background p-8">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-center mb-8 text-text">
+        <h1 className="text-3xl font-bold text-center mb-8 text-text-primary">
           Article Writer
         </h1>
         
@@ -36,8 +36,6 @@ const Index = () => {
         />
 
         {currentStep === 1 && <StepOne onNext={handleNext} />}
-        
-        {/* Additional steps will be added here */}
       </div>
     </div>
   );

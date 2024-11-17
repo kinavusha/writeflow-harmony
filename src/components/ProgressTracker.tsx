@@ -38,7 +38,7 @@ export const ProgressTracker = ({
                     ? "bg-primary text-white cursor-pointer"
                     : isCurrent
                     ? "bg-secondary text-white"
-                    : "bg-surface text-text cursor-not-allowed"
+                    : "bg-surface text-text-secondary cursor-not-allowed"
                 )}
               >
                 {step.id}
@@ -46,7 +46,7 @@ export const ProgressTracker = ({
               <span
                 className={cn(
                   "mt-2 text-sm font-medium",
-                  isCurrent ? "text-secondary" : "text-text"
+                  isCurrent ? "text-secondary" : "text-text-secondary"
                 )}
               >
                 {step.title}

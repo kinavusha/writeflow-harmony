@@ -19,13 +19,16 @@ export default {
     },
     extend: {
       colors: {
-        primary: "#004d40",
-        "primary-light": "#00796b",
-        secondary: "#0288d1",
-        "secondary-light": "#03a9f4",
-        background: "#ffffff",
+        primary: "#006400",
+        "primary-light": "#007500",
+        secondary: "#008CBA",
+        "secondary-light": "#009DCB",
+        background: "#E6F7FF",
         surface: "#f5f5f5",
-        text: "#212121",
+        text: {
+          primary: "#333333",
+          secondary: "#555555",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
