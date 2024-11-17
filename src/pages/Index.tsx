@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ProgressTracker } from "@/components/ProgressTracker";
 import { StepOne } from "@/components/StepOne";
+import { BlogOutline } from "@/types/blog";
 
 const steps = [
   { id: 1, title: "Topic & Keywords" },
@@ -11,6 +12,7 @@ const steps = [
 
 const Index = () => {
   const [currentStep, setCurrentStep] = useState(1);
+  const [blogOutline, setBlogOutline] = useState<BlogOutline | null>(null);
 
   const handleStepClick = (step: number) => {
     if (step <= currentStep) {
@@ -18,8 +20,9 @@ const Index = () => {
     }
   };
 
-  const handleNext = () => {
-    setCurrentStep((prev) => Math.min(prev + 1, steps.length));
+  const handleOutlineGenerated = (outline: BlogOutline) => {
+    setBlogOutline(outline);
+    setCurrentStep(2);
   };
 
   return (
@@ -35,7 +38,7 @@ const Index = () => {
           onStepClick={handleStepClick}
         />
 
-        {currentStep === 1 && <StepOne onNext={handleNext} />}
+        {currentStep === 1 && <StepOne onNext={handleOutlineGenerated} />}
       </div>
     </div>
   );

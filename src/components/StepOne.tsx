@@ -4,11 +4,38 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Plus, X } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
+import { useMutation } from "@tanstack/react-query";
+import { generateBlogOutline } from "@/services/blogService";
+import { BlogOutline } from "@/types/blog";
 
-export const StepOne = ({ onNext }: { onNext: () => void }) => {
+interface StepOneProps {
+  onNext: (outline: BlogOutline) => void;
+}
+
+export const StepOne = ({ onNext }: StepOneProps) => {
   const [topic, setTopic] = useState("");
   const [shortTailKeyword, setShortTailKeyword] = useState("");
   const [longTailKeywords, setLongTailKeywords] = useState<string[]>([]);
+  const { toast } = useToast();
+
+  const generateOutlineMutation = useMutation({
+    mutationFn: generateBlogOutline,
+    onSuccess: (data) => {
+      toast({
+        title: "Outline Generated",
+        description: "Your blog outline has been successfully generated!",
+      });
+      onNext(data);
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: "Failed to generate outline. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
 
   const addLongTailKeyword = () => {
     setLongTailKeywords([...longTailKeywords, ""]);
@@ -26,7 +53,11 @@ export const StepOne = ({ onNext }: { onNext: () => void }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onNext();
+    generateOutlineMutation.mutate({
+      topic,
+      shortTailKeyword,
+      longTailKeywords: longTailKeywords.filter(Boolean),
+    });
   };
 
   return (
@@ -91,8 +122,12 @@ export const StepOne = ({ onNext }: { onNext: () => void }) => {
         </div>
 
         <div className="pt-4">
-          <Button type="submit" className="w-full bg-primary hover:bg-primary-light text-white">
-            Generate Outline
+          <Button 
+            type="submit"
+            className="w-full bg-primary hover:bg-primary-light text-white"
+            disabled={generateOutlineMutation.isPending}
+          >
+            {generateOutlineMutation.isPending ? "Generating..." : "Generate Outline"}
           </Button>
         </div>
       </form>
