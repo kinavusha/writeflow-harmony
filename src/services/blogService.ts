@@ -47,7 +47,7 @@ export const saveBlogMetadata = async (
 export const updateSectionContent = async (sectionId: string, content: string) => {
   const { error } = await supabase
     .from('blog_sections')
-    .update([{ content }])
+    .update({ content })
     .eq('id', sectionId);
 
   if (error) {
